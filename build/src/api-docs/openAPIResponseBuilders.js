@@ -1,27 +1,22 @@
-import { StatusCodes } from "http-status-codes";
-import { z } from "zod";
-
-import { ServiceResponseSchema } from "@common/models/serviceResponse";
-
-export function createApiResponse(
-  schema: z.ZodTypeAny,
-  description: string,
-  statusCode = StatusCodes.OK,
-) {
-  return {
-    [statusCode]: {
-      description,
-      content: {
-        "application/json": {
-          schema: ServiceResponseSchema(schema),
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createApiResponse = void 0;
+const http_status_codes_1 = require("http-status-codes");
+const serviceResponse_1 = require("@common/models/serviceResponse");
+function createApiResponse(schema, description, statusCode = http_status_codes_1.StatusCodes.OK) {
+    return {
+        [statusCode]: {
+            description,
+            content: {
+                'application/json': {
+                    schema: (0, serviceResponse_1.ServiceResponseSchema)(schema),
+                },
+            },
         },
-      },
-    },
-  };
+    };
 }
-
+exports.createApiResponse = createApiResponse;
 // Use if you want multiple responses for a single endpoint
-
 // import { ResponseConfig } from '@asteasolutions/zod-to-openapi';
 // import { ApiResponseConfig } from '@common/models/openAPIResponseConfig';
 // export type ApiResponseConfig = {

@@ -1,14 +1,19 @@
-export const getPort = () => getEnvVar<number>('PORT', 'number');
-export const getNodeEnv = () => getEnvVar<string>('NODE_ENV', 'string');
-export const getCorsOrigin = () => getEnvVar<string>('CORS_ORIGIN', 'string');
+export const getPort = () => getEnvVar<number>("PORT", "number");
+export const getNodeEnv = () => getEnvVar<string>("NODE_ENV", "string");
+export const getCorsOrigin = () => getEnvVar<string>("CORS_ORIGIN", "string");
 
-export function getEnvVar<T extends string | number>(key: string, type: 'string' | 'number'): T {
+export function getEnvVar<T extends string | number>(
+  key: string,
+  type: "string" | "number",
+): T {
   const value = process.env[key];
   if (value == null) {
-    throw new Error(`Unknown process.env.${key}: ${value}. Is your .env file setup?`);
+    throw new Error(
+      `Unknown process.env.${key}: ${value}. Is your .env file setup?`,
+    );
   }
 
-  if (type === 'number') {
+  if (type === "number") {
     const numValue = parseInt(value);
     if (Number.isNaN(numValue)) {
       throw new Error(`process.env.${key} must be a number. Got ${value}`);
