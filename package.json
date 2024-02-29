@@ -1,7 +1,7 @@
 {
   "name": "express-typescript-boilerplate",
   "version": "1.0.0",
-  "description": "An Express.js boilerplate backend",
+  "description": "Express-Server-Api",
   "main": "index.ts",
   "scripts": {
     "ts:check": "tsc --noEmit",
@@ -27,7 +27,25 @@
     "http-status-codes": "^2.3.0",
     "pino-http": "^9.0.0",
     "swagger-ui-express": "^5.0.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@prisma/client": "^5.9.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/body-parser": "^1.19.5",
+    "@types/config": "^3.3.3",
+    "@types/cookie-parser": "^1.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/lodash": "^4.14.202",
+    "@types/nanoid": "^3.0.0",
+    "@types/node": "^20.11.20",
+    "@types/nodemailer": "^6.4.14",
+    "@types/pino": "^7.0.5",
+    "apollo-server-express": "^3.13.0",
+    "graphql": "^16.8.1",
+    "prisma": "^5.9.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@tsconfig/node-lts-strictest-esm": "^18.12.1",
@@ -53,7 +71,25 @@
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "@apollo/explorer": "^3.6.0",
+    "@googleapis/docs": "^3.0.0",
+    "bcrypt": "^5.1.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "config": "^3.3.11",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.10",
+    "googleapis": "^133.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "nanoid": "^5.0.6",
+    "nodemailer": "^6.9.9",
+    "nodemon": "^3.0.3",
+    "pino": "^8.19.0",
+    "reflect-metadata": "^0.2.1",
+    "use-deep-compare-effect": "^1.8.1"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": [
@@ -63,7 +99,7 @@
     "src/**/*.{ts,js,json}": "npm run format",
     "tests/**/*.{ts,js,json}": "npm run format"
   },
-  "author": "Edwin Hernandez",
-  "repository": "edwinhern/express-typescript-2024",
-  "license": "ISC"
+  "author": "Hamjeth Misree",
+  "repository": "hamjeth/Express-Server-Api"
+
 }
