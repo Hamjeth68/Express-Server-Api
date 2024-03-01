@@ -1,11 +1,11 @@
 import request from "supertest";
-import { appointmentRepository } from "@modules/appoinments/appoinmentsRepository";
 
 import express, { Express } from 'express';
 import { Appointment } from "@modules/appoinments/appoinmentsModel";
 import { appointmentRouter } from "@modules/appoinments/appoinmentsRouter";
+import { appointmentRepository } from "@modules/appoinments/appoinmentsRepository";
 
-jest.mock('@src/modules/appointments/appointmentsRepository');
+jest.mock('@modules/appoinments/appoinmentsRepository');
 
 describe('Appointment Router', () => {
   let app: Express;
@@ -20,11 +20,63 @@ describe('Appointment Router', () => {
     jest.clearAllMocks();
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
+  const mockAppointment: Appointment = {
+    id: 1,
+    name: "Appointment 1",
+    date: "2022-01-01",
+    time: "10:00",
+    email: "bQWJi@example.com",
+    build: "Build 1",
+    whatToBuild: "What to build 1",
+    website: "https://example.com",
+    contactNumber: "1234567890",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  (appointmentRepository.create as jest.Mock).mockResolvedValue(mockAppointment);
+
+  describe('POST /appointments', () => {
+    it('should create a new appointment', async () => {
+      // Send request
+      const response = await request(app)
+        .post('/appointments')
+        .send(mockAppointment);
+
+      // Assertions
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(mockAppointment);
+    });
+
+    it('should handle errors and return 500 status code', async () => {
+      // Mock error
+      (appointmentRepository.create as jest.Mock).mockRejectedValue(new Error('Database error'));
+
+      // Send request
+      const response = await request(app)
+        .post('/appointments')
+        .send(mockAppointment);
+
+      // Assertions
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ error: 'Internal Server Error' });
+    });
+  });
+
   describe('GET /appointments', () => {
     it('should return a list of appointments', async () => {
-        // Mock the appointmentRepository methods
+      // Mock data
       const mockAppointments: Appointment[] = [
-        { id: 1,
+        { 
+          id: 1,
           name: "Appointment 1",
           date: "2022-01-01",
           time: "10:00",
@@ -35,10 +87,9 @@ describe('Appointment Router', () => {
           contactNumber: "1234567890",
           createdAt: new Date(),
           updatedAt: new Date(),
-
-        
         },
-        { id: 2, 
+        { 
+          id: 2, 
           name: "Appointment 2",
           date: "2022-01-02",
           time: "11:00",
@@ -53,55 +104,115 @@ describe('Appointment Router', () => {
       ];
       (appointmentRepository.findAllAsync as jest.Mock).mockResolvedValue(mockAppointments);
 
+      // Send request
       const response = await request(app).get('/appointments');
 
+      // Assertions
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockAppointments);
     });
 
     it('should handle errors and return 500 status code', async () => {
+      // Mock error
       (appointmentRepository.findAllAsync as jest.Mock).mockRejectedValue(new Error('Database error'));
 
+      // Send request
       const response = await request(app).get('/appointments');
 
+      // Assertions
       expect(response.status).toBe(500);
       expect(response.body).toEqual({ error: 'Internal Server Error' });
     });
   });
 
-  describe('GET /appointments/:id', () => {
-    it('should return an appointment by id', async () => {
-      const mockAppointment: Appointment = {
+  describe('PUT /appointments/:id', () => {
+    it('should update an existing appointment', async () => {
+      // Mock data
+      const updatedAppointment: Appointment = {
         id: 1,
-        name: "Appointment 1",
-        date: "2022-01-01",
-        time: "10:00",
-        email: "bQWJi@example.com",
-        build: "Build 1",
-        whatToBuild: "What to build 1",
+        name: "Updated Appointment",
+        date: "2022-01-04",
+        time: "13:00",
+        email: "updated@example.com",
+        build: "Updated Build",
+        whatToBuild: "Updated build details",
         website: "https://example.com",
-        contactNumber: "1234567890",
+        contactNumber: "9999999999",
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      (appointmentRepository.findByIdAsync as jest.Mock).mockResolvedValue(mockAppointment);
+      (appointmentRepository.update as jest.Mock).mockResolvedValue(updatedAppointment);
 
-      const response = await request(app).get('/appointments/1');
+      // Send request
+      const response = await request(app)
+        .put('/appointments/1')
+        .send(updatedAppointment);
 
+      // Assertions
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockAppointment);
+      expect(response.body).toEqual(updatedAppointment);
     });
 
     it('should handle errors and return 500 status code', async () => {
-      (appointmentRepository.findByIdAsync as jest.Mock).mockRejectedValue(new Error('Database error'));
+      // Mock error
+      (appointmentRepository.update as jest.Mock).mockRejectedValue(new Error('Database error'));
 
-      const response = await request(app).get('/appointments/1');
+      // Send request
+      const response = await request(app)
+        .put('/appointments/1')
+        .send({
+          name: "Updated Appointment",
+          date: "2022-01-04",
+          time: "13:00",
+          email: "updated@example.com",
+          build: "Updated Build",
+          whatToBuild: "Updated build details",
+          website: "https://example.com",
+          contactNumber: "9999999999",
+        });
 
+      // Assertions
       expect(response.status).toBe(500);
       expect(response.body).toEqual({ error: 'Internal Server Error' });
     });
   });
 
+  describe('DELETE /appointments/:id', () => {
+    it('should delete an existing appointment', async () => {
+      // Mock data
+      const deletedAppointment: Appointment = {
+        id: 1,
+        name: "Deleted Appointment",
+        date: "2022-01-01",
+        time: "10:00",
+        email: "deleted@example.com",
+        build: "Deleted Build",
+        whatToBuild: "Deleted build details",
+        website: "https://example.com",
+        contactNumber: "9876543210",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      (appointmentRepository.delete as jest.Mock).mockResolvedValue(deletedAppointment);
 
+      // Send request
+      const response = await request(app).delete('/appointments/1');
 
+      // Assertions
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(deletedAppointment);
+    });
+
+    it('should handle errors and return 500 status code', async () => {
+      // Mock error
+      (appointmentRepository.delete as jest.Mock).mockRejectedValue(new Error('Database error'));
+
+      // Send request
+      const response = await request(app).delete('/appointments/1');
+
+      // Assertions
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ error: 'Internal Server Error' });
+    });
+  });
 });
