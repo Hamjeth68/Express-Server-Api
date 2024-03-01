@@ -1,13 +1,10 @@
 import express, { Request, Response, Router } from "express";
-import {  AppointmentSchema } from "@modules/appoinments/appoinmentsModel";
+import { AppointmentSchema } from "@modules/appoinments/appoinmentsModel";
 import { appointmentRepository } from "@modules/appoinments/appoinmentsRepository";
-
-
 
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { createApiResponse } from "@api-docs/openAPIResponseBuilders";
 import { z } from "zod";
-
 
 // Create a new OpenAPIRegistry instance
 export const appointmentRegistry = new OpenAPIRegistry();
@@ -32,11 +29,9 @@ export const appointmentRouter: Router = (() => {
     try {
       const appointments = await appointmentRepository.findAllAsync();
       res.json(appointments);
-      
     } catch (error) {
       console.error("Error retrieving appointments:", error);
       res.status(500).json({ error: "Internal Server Error" });
-     
     }
   });
 
@@ -68,8 +63,79 @@ export const appointmentRouter: Router = (() => {
     }
   });
 
-  
-  // Other endpoints (POST, PUT, DELETE) follow a similar pattern
+  // Register the POST /appointments endpoint
+  appointmentRegistry.registerPath({
+    method: "post",
+    path: "/appointments",
+    tags: ["Appointments"],
+    responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
+  });
 
+  // Define the POST /appointments endpoint
+  router.post("/", async (req: Request, res: Response) => {
+    try {
+      const appointment = req.body;
+      const createdAppointment =
+        await appointmentRepository.create(appointment);
+      res.status(201).json(createdAppointment);
+    } catch (error) {
+      console.error("Error creating appointment:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
+  // Register the PUT /appointments/:id endpoint
+
+  appointmentRegistry.registerPath({
+    method: "put",
+    path: "/appointments/{id}",
+    tags: ["Appointments"],
+    responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
+  });
+
+  // Define the PUT /appointments/:id endpoint
+  router.put("/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id || "", 10);
+      if (isNaN(id)) {
+        res.status(400).json({ error: "Invalid appointment id" });
+        return;
+      }
+      const appointment = req.body;
+      const updatedAppointment = await appointmentRepository.update(
+        id,
+        appointment
+      );
+      res.json(updatedAppointment);
+    } catch (error) {
+      console.error("Error updating appointment:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
+  // Register the DELETE /appointments/:id endpoint
+  appointmentRegistry.registerPath({
+    method: "delete",
+    path: "/appointments/{id}",
+    tags: ["Appointments"],
+    responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
+  });
+
+  // Define the DELETE /appointments/:id endpoint
+  router.delete("/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id || "", 10);
+      if (isNaN(id)) {
+        res.status(400).json({ error: "Invalid appointment id" });
+        return;
+      }
+      const deletedAppointment = await appointmentRepository.delete(id);
+      res.json(deletedAppointment);
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
   return router;
 })();
