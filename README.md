@@ -1,12 +1,9 @@
-# 🚀 Express TypeScript Boilerplate 2024
+# 🚀 Express Server Appointments
 
 [![Docker Image CI](https://github.com/edwinhern/express-typescript-2024/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/docker-image.yml)
 [![CodeQL](https://github.com/edwinhern/express-typescript-2024/actions/workflows/codeql.yml/badge.svg)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/codeql.yml)
 [![Build Express+Typescript Application](https://github.com/edwinhern/express-typescript-2024/actions/workflows/test.yml/badge.svg)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/test.yml)
 
-## 🌟 Introduction
-
-Welcome to the Express TypeScript Boilerplate 2024 – a streamlined, efficient, and scalable foundation for building powerful backend services. This boilerplate merges modern tools and practices in Express.js and TypeScript, enhancing productivity, code quality, and performance.
 
 ## 💡 Motivation and Intentions
 
@@ -40,8 +37,8 @@ Developed to streamline backend development, this boilerplate is your solution f
 
 ### Step 1: 🚀 Initial Setup
 
-- Clone the repository: `git clone https://github.com/edwinhern/express-typescript-2024.git`
-- Navigate: `cd express-typescript-2024`
+- Clone the repository: `git clone https://github.com/Hamjeth68/Express-Server-Api`
+- Navigate: `cd Express-Server-Api/`
 - Install dependencies: `npm ci`
 
 ### Step 2: ⚙️ Environment Configuration
