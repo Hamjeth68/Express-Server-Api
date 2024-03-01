@@ -1,5 +1,5 @@
 {
-  "name": "express-typescript-boilerplate",
+  "name": "Express-Server-Api",
   "version": "1.0.0",
   "description": "Express-Server-Api",
   "main": "index.ts",
