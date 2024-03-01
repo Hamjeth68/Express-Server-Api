@@ -15,13 +15,13 @@ exports.healthCheckRegistry = new zod_to_openapi_1.OpenAPIRegistry();
 exports.healthCheckRouter = (() => {
     const router = express_1.default.Router();
     exports.healthCheckRegistry.registerPath({
-        method: 'get',
-        path: '/health-check',
-        tags: ['Health Check'],
-        responses: (0, openAPIResponseBuilders_1.createApiResponse)(zod_1.z.null(), 'Success'),
+        method: "get",
+        path: "/health-check",
+        tags: ["Health Check"],
+        responses: (0, openAPIResponseBuilders_1.createApiResponse)(zod_1.z.null(), "Success"),
     });
-    router.get('/', (_req, res) => {
-        const serviceResponse = new serviceResponse_1.ServiceResponse(serviceResponse_1.ResponseStatus.Success, 'Service is healthy', null, http_status_codes_1.StatusCodes.OK);
+    router.get("/", (_req, res) => {
+        const serviceResponse = new serviceResponse_1.ServiceResponse(serviceResponse_1.ResponseStatus.Success, "Service is healthy", null, http_status_codes_1.StatusCodes.OK);
         (0, httpHandlers_1.sendServiceResponse)(serviceResponse, res);
     });
     return router;

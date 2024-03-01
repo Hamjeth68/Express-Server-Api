@@ -7,12 +7,12 @@ const server = server_1.app.listen(port, () => {
     server_1.logger.info(`Server listening on port ${port}`);
 });
 const onCloseSignal = () => {
-    server_1.logger.info('sigint received, shutting down');
+    server_1.logger.info("sigint received, shutting down");
     server.close(() => {
-        server_1.logger.info('server closed');
+        server_1.logger.info("server closed");
         process.exit();
     });
     setTimeout(() => process.exit(1), 10000).unref(); // Force shutdown after 10s
 };
-process.on('SIGINT', onCloseSignal);
-process.on('SIGTERM', onCloseSignal);
+process.on("SIGINT", onCloseSignal);
+process.on("SIGTERM", onCloseSignal);

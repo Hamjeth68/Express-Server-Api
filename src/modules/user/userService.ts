@@ -10,14 +10,14 @@ import { logger } from "@src/server";
 
 export const userService = {
   // Retrieves all users from the database
-  findAll: async (): Promise<ServiceResponse<User[] | null>> => {
+  findAll: async (): Promise<ServiceResponse<User[]>> => {
     try {
       const users = await userRepository.findAllAsync();
       if (!users) {
-        return new ServiceResponse(
+        return new ServiceResponse<User[]>(
           ResponseStatus.Failed,
-          "No Users found",
-          null,
+          "No users found",
+          [],
           StatusCodes.NOT_FOUND,
         );
       }
@@ -28,12 +28,12 @@ export const userService = {
         StatusCodes.OK,
       );
     } catch (ex) {
-      const errorMessage = `Error finding all users: $${(ex as Error).message}`;
+      const errorMessage = `Error finding all users: ${(ex as Error).message}`;
       logger.error(errorMessage);
       return new ServiceResponse(
         ResponseStatus.Failed,
         errorMessage,
-        null,
+        [],
         StatusCodes.INTERNAL_SERVER_ERROR,
       );
     }

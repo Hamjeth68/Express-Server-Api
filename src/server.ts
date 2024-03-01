@@ -12,6 +12,7 @@ import requestLogger from "@common/middleware/requestLogger";
 import { getCorsOrigin } from "@common/utils/envConfig";
 import { healthCheckRouter } from "@modules/healthCheck/healthCheckRouter";
 import { userRouter } from "@modules/user/userRouter";
+import { appointmentRouter } from "@modules/appoinments/appoinmentsRouter";
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
@@ -32,6 +33,7 @@ app.use(requestLogger());
 // Routes
 app.use("/health-check", healthCheckRouter);
 app.use("/users", userRouter);
+app.use("/appointments", appointmentRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
