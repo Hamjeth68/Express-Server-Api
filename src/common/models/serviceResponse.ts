@@ -11,6 +11,14 @@ export class ServiceResponse<T = null> {
   responseObject: T;
   statusCode: number;
 
+  /**
+   * Constructor for creating a new Response object.
+   *
+   * @param {ResponseStatus} status - the status of the response
+   * @param {string} message - the message of the response
+   * @param {T} responseObject - the response object
+   * @param {number} statusCode - the status code of the response
+   */
   constructor(
     status: ResponseStatus,
     message: string,
@@ -24,6 +32,12 @@ export class ServiceResponse<T = null> {
   }
 }
 
+/**
+ * Create a service response schema based on the provided data schema.
+ *
+ * @param {T} dataSchema - The data schema to build the response schema from
+ * @return {z.ZodObject} The service response schema
+ */
 export const ServiceResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
   z.object({
     success: z.boolean(),

@@ -4,18 +4,23 @@ exports.generateOpenAPIDocument = void 0;
 const zod_to_openapi_1 = require("@asteasolutions/zod-to-openapi");
 const healthCheckRouter_1 = require("@modules/healthCheck/healthCheckRouter");
 const userRouter_1 = require("@modules/user/userRouter");
+/**
+ * Generate an OpenAPI document using the provided registry and return it.
+ *
+ * @return {object} the generated OpenAPI document
+ */
 function generateOpenAPIDocument() {
     const registry = new zod_to_openapi_1.OpenAPIRegistry([healthCheckRouter_1.healthCheckRegistry, userRouter_1.userRegistry]);
     const generator = new zod_to_openapi_1.OpenApiGeneratorV3(registry.definitions);
     return generator.generateDocument({
-        openapi: '3.0.0',
+        openapi: "3.0.0",
         info: {
-            version: '1.0.0',
-            title: 'Swagger API',
+            version: "1.0.0",
+            title: "Swagger API",
         },
         externalDocs: {
-            description: 'View the raw OpenAPI Specification in JSON format',
-            url: '/swagger.json',
+            description: "View the raw OpenAPI Specification in JSON format",
+            url: "/swagger.json",
         },
     });
 }

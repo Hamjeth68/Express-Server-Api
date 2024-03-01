@@ -17,10 +17,11 @@ const requestLogger_1 = __importDefault(require("@common/middleware/requestLogge
 const envConfig_1 = require("@common/utils/envConfig");
 const healthCheckRouter_1 = require("@modules/healthCheck/healthCheckRouter");
 const userRouter_1 = require("@modules/user/userRouter");
+const appoinmentsRouter_1 = require("@modules/appoinments/appoinmentsRouter");
 dotenv_1.default.config({
-    path: path_1.default.resolve(__dirname, '../.env'),
+    path: path_1.default.resolve(__dirname, "../.env"),
 });
-const logger = (0, pino_1.pino)({ name: 'server start' });
+const logger = (0, pino_1.pino)({ name: "server start" });
 exports.logger = logger;
 const app = (0, express_1.default)();
 exports.app = app;
@@ -32,8 +33,9 @@ app.use(rateLimiter_1.default);
 // Request logging
 app.use((0, requestLogger_1.default)());
 // Routes
-app.use('/health-check', healthCheckRouter_1.healthCheckRouter);
-app.use('/users', userRouter_1.userRouter);
+app.use("/health-check", healthCheckRouter_1.healthCheckRouter);
+app.use("/users", userRouter_1.userRouter);
+app.use("/appointments", appoinmentsRouter_1.appointmentRouter);
 // Swagger UI
 app.use(openAPIRouter_1.openAPIRouter);
 // Error handlers

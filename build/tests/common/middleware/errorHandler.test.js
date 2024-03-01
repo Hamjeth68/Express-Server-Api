@@ -16,20 +16,20 @@ const express_1 = __importDefault(require("express"));
 const http_status_codes_1 = require("http-status-codes");
 const supertest_1 = __importDefault(require("supertest"));
 const errorHandler_1 = __importDefault(require("@common/middleware/errorHandler"));
-describe('Error Handler Middleware', () => {
+describe("Error Handler Middleware", () => {
     const app = (0, express_1.default)();
     // Setup a route that throws an error
-    app.get('/error', () => {
-        throw new Error('Test error');
+    app.get("/error", () => {
+        throw new Error("Test error");
     });
     // Use your error handler middleware
     app.use((0, errorHandler_1.default)());
-    it('should return 404 for unknown routes', () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).get('/unknown');
+    it("should return 404 for unknown routes", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app).get("/unknown");
         expect(response.status).toBe(http_status_codes_1.StatusCodes.NOT_FOUND);
     }));
-    it('should handle thrown errors with 500 status code', () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).get('/error');
+    it("should handle thrown errors with 500 status code", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app).get("/error");
         expect(response.status).toBe(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
     }));
 });
