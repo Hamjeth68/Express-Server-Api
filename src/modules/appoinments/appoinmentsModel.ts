@@ -41,5 +41,3 @@ export const CreateAppointmentSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
 });
-
-
