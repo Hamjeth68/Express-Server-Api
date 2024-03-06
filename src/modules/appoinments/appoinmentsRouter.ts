@@ -1,10 +1,19 @@
 import express, { Request, Response, Router } from "express";
-import { AppointmentSchema } from "@modules/appoinments/appoinmentsModel";
+import { AppointmentSchema, GetAppointmentSchema } from "@modules/appoinments/appoinmentsModel";
 import { appointmentRepository } from "@modules/appoinments/appoinmentsRepository";
 
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { createApiResponse } from "@api-docs/openAPIResponseBuilders";
 import { z } from "zod";
+
+import {
+  sendServiceResponse,
+  validateRequest,
+} from "@common/utils/httpHandlers";
+
+
+import { appointmentService } from "./appoinmentsService";
+
 
 // Create a new OpenAPIRegistry instance
 export const appointmentRegistry = new OpenAPIRegistry();
@@ -27,7 +36,9 @@ export const appointmentRouter: Router = (() => {
   // Define the GET /appointments endpoint
   router.get("/", async (_req: Request, res: Response) => {
     try {
-      const appointments = await appointmentRepository.findAllAsync();
+      validateRequest(GetAppointmentSchema)
+      const appointments = await appointmentService.findAll()
+      sendServiceResponse(appointments, res);
       res.json(appointments);
     } catch (error) {
       console.error("Error retrieving appointments:", error);
@@ -40,18 +51,22 @@ export const appointmentRouter: Router = (() => {
     method: "get",
     path: "/appointments/{id}",
     tags: ["Appointments"],
+    request:  { params: GetAppointmentSchema.shape.params },
     responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
   });
 
   // Define the GET /appointments/:id endpoint
   router.get("/:id", async (req: Request, res: Response) => {
     try {
-      const id = parseInt(req.params.id || "", 10);
+      validateRequest(GetAppointmentSchema)
+      const id = parseInt(req.params.id as string, 10);
       if (isNaN(id)) {
         res.status(400).json({ error: "Invalid appointment id" });
         return;
       }
-      const appointment = await appointmentRepository.findByIdAsync(id);
+      const appointment = await appointmentService.findById(id)
+      sendServiceResponse(appointment, res);
+ 
       if (!appointment) {
         res.status(404).json({ error: "Appointment not found" });
       } else {
@@ -90,22 +105,25 @@ export const appointmentRouter: Router = (() => {
     method: "put",
     path: "/appointments/{id}",
     tags: ["Appointments"],
+    request:  { params: GetAppointmentSchema.shape.params },
     responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
   });
 
   // Define the PUT /appointments/:id endpoint
   router.put("/:id", async (req: Request, res: Response) => {
     try {
+      validateRequest(AppointmentSchema)
       const id = parseInt(req.params.id || "", 10);
       if (isNaN(id)) {
         res.status(400).json({ error: "Invalid appointment id" });
         return;
       }
       const appointment = req.body;
-      const updatedAppointment = await appointmentRepository.update(
+      const updatedAppointment = await appointmentService.update(
         id,
         appointment
       );
+      sendServiceResponse(appointment, res);
       res.json(updatedAppointment);
     } catch (error) {
       console.error("Error updating appointment:", error);
@@ -118,18 +136,21 @@ export const appointmentRouter: Router = (() => {
     method: "delete",
     path: "/appointments/{id}",
     tags: ["Appointments"],
+    request:  { params: GetAppointmentSchema.shape.params },
     responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
   });
 
   // Define the DELETE /appointments/:id endpoint
   router.delete("/:id", async (req: Request, res: Response) => {
     try {
+      validateRequest(GetAppointmentSchema)
       const id = parseInt(req.params.id || "", 10);
       if (isNaN(id)) {
         res.status(400).json({ error: "Invalid appointment id" });
         return;
       }
-      const deletedAppointment = await appointmentRepository.delete(id);
+      const deletedAppointment = await appointmentService.delete(id);
+      sendServiceResponse(deletedAppointment, res);
       res.json(deletedAppointment);
     } catch (error) {
       console.error("Error deleting appointment:", error);
