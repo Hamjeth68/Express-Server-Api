@@ -5,7 +5,7 @@ import { Appointment } from "@modules/appoinments/appoinmentsModel";
 import { appointmentRouter } from "@modules/appoinments/appoinmentsRouter";
 import { appointmentRepository } from "@modules/appoinments/appoinmentsRepository";
 
-jest.mock('@modules/appoinments/appoinmentsRepository');
+jest.mock('@modules/appointments/appointmentsRepository');
 
 describe('Appointment Router', () => {
   let app: Express;
