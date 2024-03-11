@@ -71,23 +71,26 @@
 // })();
 
 
-import { getPort } from "@common/utils/envConfig";
-import { app, logger } from "@src/server";
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import pinoHttp from 'pino-http';
+import typeDefs from '@GraphQL/typeDefs';
+import resolvers from '@GraphQL/resolvers';
 
-const port = getPort();
+const app = express();
 
-const server = app.listen(port, () => {
-  logger.info( `🚀 Server ready at http://localhost:${port}`);
-});
+// Create a pino-http logger middleware
+app.use(pinoHttp());
 
-const onCloseSignal = () => {
-  logger.info("sigint received, shutting down");
-  server.close(() => {
-    logger.info("server closed");
-    process.exit();
+const server = new ApolloServer({ typeDefs, resolvers });
+server.start().then(() => {
+  server.applyMiddleware({ app });
+
+  const PORT = process.env.PORT || 3000;
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
   });
-  setTimeout(() => process.exit(1), 10000).unref(); // Force shutdown after 10s
-};
-
-process.on("SIGINT", onCloseSignal);
-process.on("SIGTERM", onCloseSignal);
+}).catch((error) => {
+  console.error('Error starting Apollo Server:', error);
+});

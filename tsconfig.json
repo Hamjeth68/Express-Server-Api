@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
-    "module": "commonjs",
+    "target": "ES2019",
+    "module": "esnext",
     "baseUrl": ".",
     "paths": {
       "@api-docs/*": ["src/api-docs/*"],
