@@ -1,4 +1,5 @@
 import cors from "cors";
+
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import helmet from "helmet";
@@ -13,6 +14,7 @@ import { getCorsOrigin } from "@common/utils/envConfig";
 import { healthCheckRouter } from "@modules/healthCheck/healthCheckRouter";
 import { userRouter } from "@modules/user/userRouter";
 import { appointmentRouter } from "@modules/appoinments/appoinmentsRouter";
+ 
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
@@ -26,6 +28,7 @@ const corsOrigin = getCorsOrigin();
 app.use(cors({ origin: [corsOrigin], credentials: true }));
 app.use(helmet());
 app.use(rateLimiter);
+
 
 // Request logging
 app.use(requestLogger());

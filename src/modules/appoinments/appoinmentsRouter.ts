@@ -17,6 +17,7 @@ import {
 
 import { appointmentService } from "./appoinmentsService";
 
+
 // Create a new OpenAPIRegistry instance
 export const appointmentRegistry = new OpenAPIRegistry();
 
@@ -83,7 +84,7 @@ export const appointmentRouter: Router = (() => {
   // Register the POST /appointments endpoint
   appointmentRegistry.registerPath({
     method: "post",
-    path: "/post-appointments",
+    path: "/appointments",
     tags: ["Appointments"],
     responses: createApiResponse(AppointmentSchema, "Success"),
     request: {
