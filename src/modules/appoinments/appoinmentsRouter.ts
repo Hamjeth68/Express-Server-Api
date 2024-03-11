@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import {
+  AppointmentRequestBodySchema,
   AppointmentSchema,
   GetAppointmentSchema,
 } from "@modules/appoinments/appoinmentsModel";
@@ -82,9 +83,12 @@ export const appointmentRouter: Router = (() => {
   // Register the POST /appointments endpoint
   appointmentRegistry.registerPath({
     method: "post",
-    path: "/appointments",
+    path: "/post-appointments",
     tags: ["Appointments"],
-    responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
+    responses: createApiResponse(AppointmentSchema, "Success"),
+    request: {
+      params: AppointmentRequestBodySchema.shape.params,
+    },    
   });
 
   // Define the POST /appointments endpoint
