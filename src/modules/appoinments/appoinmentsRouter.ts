@@ -88,7 +88,7 @@ export const appointmentRouter: Router = (() => {
     responses: createApiResponse(AppointmentSchema, "Success"),
     request: {
       params: AppointmentRequestBodySchema.shape.params,
-    },    
+    },
   });
 
   // Define the POST /appointments endpoint

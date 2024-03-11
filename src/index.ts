@@ -1,7 +1,7 @@
 import { ApolloServer, gql } from "apollo-server-express";
-import express from 'express';
-import http from 'http';
-import cors from 'cors';
+import express from "express";
+import http from "http";
+import cors from "cors";
 import { getCorsOrigin, getPort } from "@common/utils/envConfig";
 import { logger } from "@src/server";
 import { resolvers } from "@GraphQL/resolvers";
@@ -9,29 +9,27 @@ import { resolvers } from "@GraphQL/resolvers";
 (async () => {
   // Define your GraphQL schema and resolvers
   const typeDefs = gql`
-  type Query {
-    getAppointments: [Appointment!]!
-  }
+    type Query {
+      getAppointments: [Appointment!]!
+    }
 
-  type Mutation {
-    bookAppointment(
+    type Mutation {
+      bookAppointment(
+        name: String!
+        email: String!
+        date: String!
+        time: String!
+      ): Appointment!
+    }
+
+    type Appointment {
+      id: ID!
       name: String!
       email: String!
       date: String!
       time: String!
-    ): Appointment!
-  }
-
-  type Appointment {
-    id: ID!
-    name: String!
-    email: String!
-    date: String!
-    time: String!
-  }
-`;
-
-
+    }
+  `;
 
   // Create an Express app and HTTP server
   const app = express();
@@ -53,7 +51,9 @@ import { resolvers } from "@GraphQL/resolvers";
 
   const port = getPort();
   httpServer.listen({ port }, () => {
-    logger.info(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);
+    logger.info(
+      `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`,
+    );
   });
 
   // Handle shutdown signals

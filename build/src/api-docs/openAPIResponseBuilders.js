@@ -30,7 +30,7 @@ function createApiResponses(configs) {
         responses[statusCode] = {
             description,
             content: {
-                'application/json': {
+                "application/json": {
                     schema: (0, serviceResponse_1.ServiceResponseSchema)(schema),
                 },
             },

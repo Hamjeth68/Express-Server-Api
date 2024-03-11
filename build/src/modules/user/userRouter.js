@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -30,10 +21,10 @@ exports.userRouter = (() => {
         tags: ["User"],
         responses: (0, openAPIResponseBuilders_1.createApiResponse)(zod_1.z.array(userModel_1.UserSchema), "Success"),
     });
-    router.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const serviceResponse = yield userService_1.userService.findAll();
+    router.get("/", async (_req, res) => {
+        const serviceResponse = await userService_1.userService.findAll();
         (0, httpHandlers_1.sendServiceResponse)(serviceResponse, res);
-    }));
+    });
     exports.userRegistry.registerPath({
         method: "get",
         path: "/users/{id}",
@@ -41,10 +32,10 @@ exports.userRouter = (() => {
         request: { params: userModel_1.GetUserSchema.shape.params },
         responses: (0, openAPIResponseBuilders_1.createApiResponse)(userModel_1.UserSchema, "Success"),
     });
-    router.get("/:id", (0, httpHandlers_1.validateRequest)(userModel_1.GetUserSchema), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.get("/:id", (0, httpHandlers_1.validateRequest)(userModel_1.GetUserSchema), async (req, res) => {
         const id = parseInt(req.params.id, 10);
-        const serviceResponse = yield userService_1.userService.findById(id);
+        const serviceResponse = await userService_1.userService.findById(id);
         (0, httpHandlers_1.sendServiceResponse)(serviceResponse, res);
-    }));
+    });
     return router;
 })();
