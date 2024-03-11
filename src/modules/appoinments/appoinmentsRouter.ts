@@ -1,5 +1,9 @@
 import express, { Request, Response, Router } from "express";
-import { AppointmentSchema, GetAppointmentSchema } from "@modules/appoinments/appoinmentsModel";
+import {
+  AppointmentRequestBodySchema,
+  AppointmentSchema,
+  GetAppointmentSchema,
+} from "@modules/appoinments/appoinmentsModel";
 import { appointmentRepository } from "@modules/appoinments/appoinmentsRepository";
 
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
@@ -10,7 +14,6 @@ import {
   sendServiceResponse,
   validateRequest,
 } from "@common/utils/httpHandlers";
-
 
 import { appointmentService } from "./appoinmentsService";
 
@@ -36,8 +39,8 @@ export const appointmentRouter: Router = (() => {
   // Define the GET /appointments endpoint
   router.get("/", async (_req: Request, res: Response) => {
     try {
-      validateRequest(GetAppointmentSchema)
-      const appointments = await appointmentService.findAll()
+      validateRequest(GetAppointmentSchema);
+      const appointments = await appointmentService.findAll();
       sendServiceResponse(appointments, res);
       res.json(appointments);
     } catch (error) {
@@ -51,22 +54,22 @@ export const appointmentRouter: Router = (() => {
     method: "get",
     path: "/appointments/{id}",
     tags: ["Appointments"],
-    request:  { params: GetAppointmentSchema.shape.params },
+    request: { params: GetAppointmentSchema.shape.params },
     responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
   });
 
   // Define the GET /appointments/:id endpoint
   router.get("/:id", async (req: Request, res: Response) => {
     try {
-      validateRequest(GetAppointmentSchema)
+      validateRequest(GetAppointmentSchema);
       const id = parseInt(req.params.id as string, 10);
       if (isNaN(id)) {
         res.status(400).json({ error: "Invalid appointment id" });
         return;
       }
-      const appointment = await appointmentService.findById(id)
+      const appointment = await appointmentService.findById(id);
       sendServiceResponse(appointment, res);
- 
+
       if (!appointment) {
         res.status(404).json({ error: "Appointment not found" });
       } else {
@@ -83,7 +86,10 @@ export const appointmentRouter: Router = (() => {
     method: "post",
     path: "/appointments",
     tags: ["Appointments"],
-    responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
+    responses: createApiResponse(AppointmentSchema, "Success"),
+    request: {
+      params: AppointmentRequestBodySchema.shape.params,
+    },
   });
 
   // Define the POST /appointments endpoint
@@ -105,14 +111,14 @@ export const appointmentRouter: Router = (() => {
     method: "put",
     path: "/appointments/{id}",
     tags: ["Appointments"],
-    request:  { params: GetAppointmentSchema.shape.params },
+    request: { params: GetAppointmentSchema.shape.params },
     responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
   });
 
   // Define the PUT /appointments/:id endpoint
   router.put("/:id", async (req: Request, res: Response) => {
     try {
-      validateRequest(AppointmentSchema)
+      validateRequest(AppointmentSchema);
       const id = parseInt(req.params.id || "", 10);
       if (isNaN(id)) {
         res.status(400).json({ error: "Invalid appointment id" });
@@ -121,7 +127,7 @@ export const appointmentRouter: Router = (() => {
       const appointment = req.body;
       const updatedAppointment = await appointmentService.update(
         id,
-        appointment
+        appointment,
       );
       sendServiceResponse(appointment, res);
       res.json(updatedAppointment);
@@ -136,14 +142,14 @@ export const appointmentRouter: Router = (() => {
     method: "delete",
     path: "/appointments/{id}",
     tags: ["Appointments"],
-    request:  { params: GetAppointmentSchema.shape.params },
+    request: { params: GetAppointmentSchema.shape.params },
     responses: createApiResponse(AppointmentSchema, "Success"), // Assuming you have a createApiResponse function
   });
 
   // Define the DELETE /appointments/:id endpoint
   router.delete("/:id", async (req: Request, res: Response) => {
     try {
-      validateRequest(GetAppointmentSchema)
+      validateRequest(GetAppointmentSchema);
       const id = parseInt(req.params.id || "", 10);
       if (isNaN(id)) {
         res.status(400).json({ error: "Invalid appointment id" });
@@ -157,6 +163,6 @@ export const appointmentRouter: Router = (() => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
-  
+
   return router;
 })();

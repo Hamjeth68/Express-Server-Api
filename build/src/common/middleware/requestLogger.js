@@ -10,9 +10,17 @@ const envConfig_1 = require("@common/utils/envConfig");
  * @return {RequestHandler[]} an array of request handler middleware
  */
 const requestLogger = (options) => {
-    const pinoOptions = Object.assign({ customProps: customProps, redact: ["request.headers", "response.headers"], genReqId,
+    const pinoOptions = {
+        customProps: customProps,
+        redact: ["request.headers", "response.headers"],
+        genReqId,
         customLogLevel,
-        customSuccessMessage, customReceivedMessage: (req) => `request received: ${req.method}`, customErrorMessage: (_req, res) => `request errored with status code: ${res.statusCode}`, customAttributeKeys }, options);
+        customSuccessMessage,
+        customReceivedMessage: (req) => `request received: ${req.method}`,
+        customErrorMessage: (_req, res) => `request errored with status code: ${res.statusCode}`,
+        customAttributeKeys,
+        ...options,
+    };
     return [responseBodyMiddleware, (0, pino_http_1.pinoHttp)(pinoOptions)];
 };
 const customAttributeKeys = {

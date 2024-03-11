@@ -31,9 +31,6 @@ const appointments: Appointment[] = [
 ];
 
 export const appointmentRepository = {
-
-    
-    
   /**
    * Asynchronously finds all appointments.
    *
@@ -49,7 +46,9 @@ export const appointmentRepository = {
    */
   findByIdAsync: async (id: number): Promise<Appointment | null> => {
     try {
-      const appointment = appointments.find((appointment) => appointment.id === id);
+      const appointment = appointments.find(
+        (appointment) => appointment.id === id,
+      );
       return appointment || null;
     } catch (error) {
       console.error("Error finding appointment by id:", error);
@@ -64,8 +63,16 @@ export const appointmentRepository = {
    * @return {Promise<Appointment>} The created appointment
    */
   create: async (appointmentData: Appointment): Promise<Appointment> => {
-    const newId = appointments.length === 0 ? 1 : Math.max(...appointments.map(({ id }) => id)) + 1;
-    const newAppointment: Appointment = { ...appointmentData, createdAt: new Date(), updatedAt: new Date(), id: newId };
+    const newId =
+      appointments.length === 0
+        ? 1
+        : Math.max(...appointments.map(({ id }) => id)) + 1;
+    const newAppointment: Appointment = {
+      ...appointmentData,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      id: newId,
+    };
     appointments.push(newAppointment);
     return newAppointment;
   },
@@ -77,9 +84,14 @@ export const appointmentRepository = {
    * @param {Appointment} appointmentData - The updated appointment data
    * @return {Promise<Appointment | null>} The updated appointment or null if not found
    */
-  update: async (id: number, appointmentData: Appointment): Promise<Appointment | null> => {
+  update: async (
+    id: number,
+    appointmentData: Appointment,
+  ): Promise<Appointment | null> => {
     try {
-      const existingAppointmentIndex = appointments.findIndex((appointment) => appointment.id === id);
+      const existingAppointmentIndex = appointments.findIndex(
+        (appointment) => appointment.id === id,
+      );
       if (existingAppointmentIndex !== -1) {
         const updatedAppointment: Appointment = {
           ...appointments[existingAppointmentIndex],
@@ -104,10 +116,14 @@ export const appointmentRepository = {
    */
   delete: async (id: number): Promise<Appointment | null> => {
     try {
-      const filteredAppointments = appointments.filter((appointment) => appointment.id !== id);
+      const filteredAppointments = appointments.filter(
+        (appointment) => appointment.id !== id,
+      );
       if (filteredAppointments.length < appointments.length) {
         appointments.splice(0, appointments.length, ...filteredAppointments);
-        return appointments.find((appointment) => appointment.id === id) || null;
+        return (
+          appointments.find((appointment) => appointment.id === id) || null
+        );
       }
       return null;
     } catch (error) {
@@ -124,7 +140,9 @@ export const appointmentRepository = {
    */
   findByEmailAsync: async (email: string): Promise<Appointment | null> => {
     try {
-      const appointment = appointments.find((appointment) => appointment.email === email);
+      const appointment = appointments.find(
+        (appointment) => appointment.email === email,
+      );
       return appointment || null;
     } catch (error) {
       console.error("Error finding appointment by email:", error);
@@ -140,7 +158,9 @@ export const appointmentRepository = {
    */
   findByDateAsync: async (date: string): Promise<Appointment | null> => {
     try {
-      const appointment = appointments.find((appointment) => appointment.date === date);
+      const appointment = appointments.find(
+        (appointment) => appointment.date === date,
+      );
       return appointment || null;
     } catch (error) {
       console.error("Error finding appointment by date:", error);
@@ -156,15 +176,13 @@ export const appointmentRepository = {
    */
   findByTimeAsync: async (time: string): Promise<Appointment | null> => {
     try {
-      const appointment = appointments.find((appointment) => appointment.time === time);
+      const appointment = appointments.find(
+        (appointment) => appointment.time === time,
+      );
       return appointment || null;
     } catch (error) {
       console.error("Error finding appointment by time:", error);
       return null;
     }
   },
-
-  
-
-  
 };

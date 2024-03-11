@@ -23,7 +23,9 @@ describe("Appointment Service", () => {
 
   describe("findAll", () => {
     it("should return a list of appointments", async () => {
-      appointmentRepository.findAllAsync = jest.fn().mockResolvedValue([mockAppointmentData]);
+      appointmentRepository.findAllAsync = jest
+        .fn()
+        .mockResolvedValue([mockAppointmentData]);
 
       const result = await appointmentService.findAll();
 
@@ -34,7 +36,9 @@ describe("Appointment Service", () => {
     });
 
     it("should handle errors when retrieving appointments", async () => {
-      appointmentRepository.findAllAsync = jest.fn().mockRejectedValue(new Error("Database error"));
+      appointmentRepository.findAllAsync = jest
+        .fn()
+        .mockRejectedValue(new Error("Database error"));
 
       const result = await appointmentService.findAll();
 
@@ -48,7 +52,9 @@ describe("Appointment Service", () => {
   describe("findById", () => {
     it("should return an appointment for a valid ID", async () => {
       const id = 1;
-      appointmentRepository.findByIdAsync = jest.fn().mockResolvedValue(mockAppointmentData);
+      appointmentRepository.findByIdAsync = jest
+        .fn()
+        .mockResolvedValue(mockAppointmentData);
 
       const result = await appointmentService.findById(id);
 
@@ -72,20 +78,26 @@ describe("Appointment Service", () => {
 
     it("should handle errors when retrieving a specific appointment", async () => {
       const id = 1;
-      appointmentRepository.findByIdAsync = jest.fn().mockRejectedValue(new Error("Database error"));
+      appointmentRepository.findByIdAsync = jest
+        .fn()
+        .mockRejectedValue(new Error("Database error"));
 
       const result = await appointmentService.findById(id);
 
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain(`Error finding appointment with id ${id}`);
+      expect(result.message).toContain(
+        `Error finding appointment with id ${id}`,
+      );
       expect(result.responseObject).toEqual(null);
     });
   });
 
   describe("create", () => {
     it("should create a new appointment", async () => {
-      appointmentRepository.create = jest.fn().mockResolvedValue(mockAppointmentData);
+      appointmentRepository.create = jest
+        .fn()
+        .mockResolvedValue(mockAppointmentData);
 
       const result = await appointmentService.create(mockAppointmentData);
 
@@ -96,7 +108,9 @@ describe("Appointment Service", () => {
     });
 
     it("should handle errors when creating a new appointment", async () => {
-      appointmentRepository.create = jest.fn().mockRejectedValue(new Error("Database error"));
+      appointmentRepository.create = jest
+        .fn()
+        .mockRejectedValue(new Error("Database error"));
 
       const result = await appointmentService.create(mockAppointmentData);
 
@@ -110,7 +124,9 @@ describe("Appointment Service", () => {
   describe("update", () => {
     it("should update an existing appointment", async () => {
       const id = 1;
-      appointmentRepository.update = jest.fn().mockResolvedValue(mockAppointmentData);
+      appointmentRepository.update = jest
+        .fn()
+        .mockResolvedValue(mockAppointmentData);
 
       const result = await appointmentService.update(id, mockAppointmentData);
 
@@ -134,13 +150,17 @@ describe("Appointment Service", () => {
 
     it("should handle errors when updating an appointment", async () => {
       const id = 1;
-      appointmentRepository.update = jest.fn().mockRejectedValue(new Error("Database error"));
+      appointmentRepository.update = jest
+        .fn()
+        .mockRejectedValue(new Error("Database error"));
 
       const result = await appointmentService.update(id, mockAppointmentData);
 
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain(`Error updating appointment with id ${id}`);
+      expect(result.message).toContain(
+        `Error updating appointment with id ${id}`,
+      );
       expect(result.responseObject).toEqual(null);
     });
   });
@@ -148,7 +168,9 @@ describe("Appointment Service", () => {
   describe("delete", () => {
     it("should delete an existing appointment", async () => {
       const id = 1;
-      appointmentRepository.delete = jest.fn().mockResolvedValue(mockAppointmentData);
+      appointmentRepository.delete = jest
+        .fn()
+        .mockResolvedValue(mockAppointmentData);
 
       const result = await appointmentService.delete(id);
 
@@ -172,13 +194,17 @@ describe("Appointment Service", () => {
 
     it("should handle errors when deleting an appointment", async () => {
       const id = 1;
-      appointmentRepository.delete = jest.fn().mockRejectedValue(new Error("Database error"));
+      appointmentRepository.delete = jest
+        .fn()
+        .mockRejectedValue(new Error("Database error"));
 
       const result = await appointmentService.delete(id);
 
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain(`Error deleting appointment with id ${id}`);
+      expect(result.message).toContain(
+        `Error deleting appointment with id ${id}`,
+      );
       expect(result.responseObject).toEqual(null);
     });
   });

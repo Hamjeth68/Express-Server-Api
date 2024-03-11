@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
-import { ResponseConfig } from '@asteasolutions/zod-to-openapi';
+import { ResponseConfig } from "@asteasolutions/zod-to-openapi";
 import { ServiceResponseSchema } from "@common/models/serviceResponse";
 
 /**
@@ -42,7 +42,7 @@ export function createApiResponses(configs: ApiResponseConfig[]) {
     responses[statusCode] = {
       description,
       content: {
-        'application/json': {
+        "application/json": {
           schema: ServiceResponseSchema(schema),
         },
       },
