@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.commonValidations = void 0;
-const zod_1 = require("zod");
-exports.commonValidations = {
-    id: zod_1.z
+import { z } from "zod";
+export const commonValidations = {
+    id: z
         .string()
         .refine((data) => !isNaN(Number(data)), "ID must be a numeric value")
         .transform(Number)

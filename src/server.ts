@@ -1,5 +1,4 @@
 import cors from "cors";
-
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import helmet from "helmet";
@@ -13,10 +12,9 @@ import requestLogger from "@common/middleware/requestLogger";
 import { getCorsOrigin } from "@common/utils/envConfig";
 import { healthCheckRouter } from "@modules/healthCheck/healthCheckRouter";
 import { userRouter } from "@modules/user/userRouter";
- 
 
 dotenv.config({
-  path: path.resolve(__dirname, "../.env"),
+  path: path.resolve(new URL("../.env", import.meta.url).pathname),
 });
 
 const logger = pino({ name: "server start" });
@@ -27,7 +25,6 @@ const corsOrigin = getCorsOrigin();
 app.use(cors({ origin: [corsOrigin], credentials: true }));
 app.use(helmet());
 app.use(rateLimiter);
-
 
 // Request logging
 app.use(requestLogger());

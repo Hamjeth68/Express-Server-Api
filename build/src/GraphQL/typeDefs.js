@@ -1,6 +1,5 @@
 import { gql } from "apollo-server-express";
-
-const typeDefs = gql`
+const typeDefs = gql `
   type Query {
     getAppointments: [Appointment!]!
   }
@@ -22,5 +21,4 @@ const typeDefs = gql`
     time: String!
   }
 `;
-
 export default typeDefs;

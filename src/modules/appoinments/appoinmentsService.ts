@@ -172,8 +172,6 @@ import { generateId } from "@common/utils/idGenerator";
 //   },
 // };
 
-
-
 export class AppointmentService {
   static getAppointments(): Appointment[] {
     return AppointmentRepository.getAppointments();
@@ -183,7 +181,7 @@ export class AppointmentService {
     name: string,
     email: string,
     date: string,
-    time: string
+    time: string,
   ): Appointment {
     const id = generateId();
     const appointment: Appointment = { id, name, email, date, time };

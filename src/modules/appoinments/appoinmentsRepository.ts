@@ -189,12 +189,7 @@
 //   },
 // };
 
-
 import { Appointment } from "@common/models/Appointment";
-
-
-
-
 
 const appointments: Appointment[] = [];
 

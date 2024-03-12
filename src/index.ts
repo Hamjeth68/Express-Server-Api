@@ -1,96 +1,67 @@
-// import { ApolloServer, gql } from "apollo-server-express";
-// import express from "express";
-// import http from "http";
-// import cors from "cors";
-// import { getCorsOrigin, getPort } from "@common/utils/envConfig";
-// import { logger } from "@src/server";
-// import { resolvers } from "@GraphQL/resolvers";
-
-// (async () => {
-//   // Define your GraphQL schema and resolvers
-//   const typeDefs = gql`
-//     type Query {
-//       getAppointments: [Appointment!]!
-//     }
-
-//     type Mutation {
-//       bookAppointment(
-//         name: String!
-//         email: String!
-//         date: String!
-//         time: String!
-//       ): Appointment!
-//     }
-
-//     type Appointment {
-//       id: ID!
-//       name: String!
-//       email: String!
-//       date: String!
-//       time: String!
-//     }
-//   `;
-
-//   // Create an Express app and HTTP server
-//   const app = express();
-//   const httpServer = http.createServer(app);
-//   const corsOrigin = getCorsOrigin();
-
-//   // Set up Apollo Server
-//   const server = new ApolloServer({
-//     typeDefs,
-//     resolvers,
-//   });
-
-//   // Start the Apollo Server
-//   await server.start();
-
-//   // Use middleware and start the server
-//   app.use(cors({ origin: [corsOrigin], credentials: true }));
-//   server.applyMiddleware({ app });
-
-//   const port = getPort();
-//   httpServer.listen({ port }, () => {
-//     logger.info(
-//       `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`,
-//     );
-//   });
-
-//   // Handle shutdown signals
-//   const onCloseSignal = () => {
-//     logger.info("sigint received, shutting down");
-//     httpServer.close(() => {
-//       logger.info("server closed");
-//       process.exit();
-//     });
-//     setTimeout(() => process.exit(1), 10000).unref(); // Force shutdown after 10s
-//   };
-
-//   process.on("SIGINT", onCloseSignal);
-//   process.on("SIGTERM", onCloseSignal);
-// })();
-
-
-import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
-import pinoHttp from 'pino-http';
-import typeDefs from '@GraphQL/typeDefs';
-import resolvers from '@GraphQL/resolvers';
+import express from "express";
+import { ApolloServer, ExpressContext } from "apollo-server-express";
+import http from "http";
+import pinoHttp from "pino-http";
+import typeDefs from "@GraphQL/typeDefs";
+import resolvers from "@GraphQL/resolvers";
+import { getPort } from "@common/utils/envConfig";
+import { logger } from "./server";
 
 const app = express();
 
 // Create a pino-http logger middleware
 app.use(pinoHttp());
 
+/**
+ * Start the GraphQL server
+ *
+ * @param {express.Application} app The express application
+ * @param {import("apollo-server-express").ApolloServer} server The Apollo Server
+ * @returns {Promise<void>} A promise that resolves when the server is ready
+ */
+const startServer = async (
+  app: express.Application,
+  server: ApolloServer<ExpressContext>,
+) => {
+  try {
+    await server.start();
+    server.applyMiddleware({ app });
+
+    const httpServer = http.createServer(app);
+    const port = getPort();
+
+    httpServer.listen(port, () => {
+      logger.info(
+        `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+      );
+    });
+
+    const onCloseSignal = () => {
+      logger.info("SIGINT/SIGTERM received, shutting down");
+      httpServer.close(() => {
+        logger.info("Server closed");
+        process.exit();
+      });
+      setTimeout(() => process.exit(1), 10000).unref(); // Force shutdown after 10s
+    };
+
+    process.on("SIGINT", onCloseSignal);
+    process.on("SIGTERM", onCloseSignal);
+  } catch (error) {
+    console.error("Error starting Apollo Server:", error);
+    logger.error("Error starting Apollo Server:", error);
+    process.exit(1);
+    
+    
+  }
+};
+
 const server = new ApolloServer({ typeDefs, resolvers });
-server.start().then(() => {
-  server.applyMiddleware({ app });
-
-  const PORT = process.env.PORT || 3000;
-
-  app.listen(PORT, () => {
-    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
-  });
-}).catch((error) => {
-  console.error('Error starting Apollo Server:', error);
+startServer(app, server).catch((error) => {
+  console.error("Error starting Apollo Server:", error);
+  logger.error("Error starting Apollo Server:", error);
+  process.exit(1);
+  
 });
+
+export default server;

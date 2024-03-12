@@ -17,7 +17,6 @@
 
 // import { appointmentService } from "./appoinmentsService";
 
-
 // // Create a new OpenAPIRegistry instance
 // export const appointmentRegistry = new OpenAPIRegistry();
 
@@ -166,6 +165,3 @@
 
 //   return router;
 // })();
-
-
-

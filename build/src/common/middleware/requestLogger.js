@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const crypto_1 = require("crypto");
-const pino_http_1 = require("pino-http");
-const envConfig_1 = require("@common/utils/envConfig");
+import { randomUUID } from "crypto";
+import { pinoHttp } from "pino-http";
+import { getNodeEnv } from "@common/utils/envConfig";
 /**
  * Generates a request logger middleware with the given options.
  *
@@ -21,7 +19,7 @@ const requestLogger = (options) => {
         customAttributeKeys,
         ...options,
     };
-    return [responseBodyMiddleware, (0, pino_http_1.pinoHttp)(pinoOptions)];
+    return [responseBodyMiddleware, pinoHttp(pinoOptions)];
 };
 const customAttributeKeys = {
     req: "request",
@@ -50,7 +48,7 @@ const customProps = (req, res) => ({
  * @param {next} - The next function to be called
  */
 const responseBodyMiddleware = (_req, res, next) => {
-    const env = (0, envConfig_1.getNodeEnv)() !== "production";
+    const env = getNodeEnv() !== "production";
     if (env) {
         const originalSend = res.send;
         res.send = function (content) {
@@ -102,8 +100,8 @@ const genReqId = (req, res) => {
     const existingID = (_a = req.id) !== null && _a !== void 0 ? _a : req.headers["x-request-id"];
     if (existingID)
         return existingID;
-    const id = (0, crypto_1.randomUUID)();
+    const id = randomUUID();
     res.setHeader("X-Request-Id", id);
     return id;
 };
-exports.default = requestLogger;
+export default requestLogger;

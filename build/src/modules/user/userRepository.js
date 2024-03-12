@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRepository = exports.users = void 0;
-exports.users = [
+export const users = [
     {
         id: 1,
         name: "Alice",
@@ -19,14 +16,14 @@ exports.users = [
         updatedAt: new Date(),
     },
 ];
-exports.userRepository = {
+export const userRepository = {
     /**
      * Asynchronously finds all users.
      *
      * @return {Promise<User[]>} the list of users
      */
     findAllAsync: async () => {
-        return exports.users;
+        return users;
     },
     /**
      * Find a user by id asynchronously.
@@ -35,6 +32,6 @@ exports.userRepository = {
      * @return {Promise<User | null>} The found user or null if not found
      */
     findByIdAsync: async (id) => {
-        return exports.users.find((user) => user.id === id) || null;
+        return users.find((user) => user.id === id) || null;
     },
 };
