@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const http_status_codes_1 = require("http-status-codes");
+import { StatusCodes } from "http-status-codes";
 /**
  * Handles unexpected requests by sending a 404 Not Found status code.
  *
@@ -9,7 +7,7 @@ const http_status_codes_1 = require("http-status-codes");
  * @return {void}
  */
 const unexpectedRequest = (_req, res) => {
-    res.sendStatus(http_status_codes_1.StatusCodes.NOT_FOUND);
+    res.sendStatus(StatusCodes.NOT_FOUND);
 };
 /**
  * Adds the error to the request log and calls the next middleware with the error.
@@ -33,9 +31,9 @@ const addErrorToRequestLog = (err, _req, res, next) => {
  * @return {void} no return value
  */
 const defaultErrorRequestHandler = (_err, _req, res) => {
-    res.sendStatus(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
 };
-exports.default = () => [
+export default () => [
     unexpectedRequest,
     addErrorToRequestLog,
     defaultErrorRequestHandler,

@@ -1,12 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEnvVar = exports.getCorsOrigin = exports.getNodeEnv = exports.getPort = void 0;
-const getPort = () => getEnvVar("PORT", "number");
-exports.getPort = getPort;
-const getNodeEnv = () => getEnvVar("NODE_ENV", "string");
-exports.getNodeEnv = getNodeEnv;
-const getCorsOrigin = () => getEnvVar("CORS_ORIGIN", "string");
-exports.getCorsOrigin = getCorsOrigin;
+export const getPort = () => getEnvVar("PORT", "number");
+export const getNodeEnv = () => getEnvVar("NODE_ENV", "string");
+export const getCorsOrigin = () => getEnvVar("CORS_ORIGIN", "string");
 /**
  * Retrieves the value of the specified environment variable and performs type checking before returning it.
  *
@@ -14,7 +8,7 @@ exports.getCorsOrigin = getCorsOrigin;
  * @param {"string" | "number" | "boolean" | "array" } type - The expected type of the environment variable value.
  * @return {T} The value of the environment variable, with the expected type.
  */
-function getEnvVar(key, type) {
+export function getEnvVar(key, type) {
     const value = process.env[key];
     if (value == null) {
         throw new Error(`Unknown process.env.${key}: ${value}. Is your .env file setup?`);
@@ -42,4 +36,3 @@ function getEnvVar(key, type) {
     }
     return value;
 }
-exports.getEnvVar = getEnvVar;

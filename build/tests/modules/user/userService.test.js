@@ -1,17 +1,6 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const http_status_codes_1 = require("http-status-codes");
-const userRepository_1 = require("@modules/user/userRepository");
-const userService_1 = require("@modules/user/userService");
+import { StatusCodes } from "http-status-codes";
+import { userRepository } from "@modules/user/userRepository";
+import { userService } from "@modules/user/userService";
 jest.mock("@modules/user/userRepository");
 describe("userService", () => {
     const mockUsers = [
@@ -36,77 +25,77 @@ describe("userService", () => {
         jest.resetAllMocks();
     });
     describe("findAll", () => {
-        it("return all users", () => __awaiter(void 0, void 0, void 0, function* () {
+        it("return all users", async () => {
             // Arrange
-            userRepository_1.userRepository.findAllAsync.mockReturnValue(mockUsers);
+            userRepository.findAllAsync.mockReturnValue(mockUsers);
             // Act
-            const result = yield userService_1.userService.findAll();
+            const result = await userService.findAll();
             // Assert
-            expect(result.statusCode).toEqual(http_status_codes_1.StatusCodes.OK);
+            expect(result.statusCode).toEqual(StatusCodes.OK);
             expect(result.success).toBeTruthy();
             expect(result.message).toContain("Users found");
             expect(result.responseObject).toEqual(mockUsers);
-        }));
-        it("returns a not found error for no users found", () => __awaiter(void 0, void 0, void 0, function* () {
+        });
+        it("returns a not found error for no users found", async () => {
             // Arrange
-            userRepository_1.userRepository.findAllAsync.mockReturnValue(null);
+            userRepository.findAllAsync.mockReturnValue(null);
             // Act
-            const result = yield userService_1.userService.findAll();
+            const result = await userService.findAll();
             // Assert
-            expect(result.statusCode).toEqual(http_status_codes_1.StatusCodes.NOT_FOUND);
+            expect(result.statusCode).toEqual(StatusCodes.NOT_FOUND);
             expect(result.success).toBeFalsy();
             expect(result.message).toContain("No Users found");
             expect(result.responseObject).toEqual(null);
-        }));
-        it("handles errors for findAllAsync", () => __awaiter(void 0, void 0, void 0, function* () {
+        });
+        it("handles errors for findAllAsync", async () => {
             // Arrange
-            userRepository_1.userRepository.findAllAsync.mockRejectedValue(new Error("Database error"));
+            userRepository.findAllAsync.mockRejectedValue(new Error("Database error"));
             // Act
-            const result = yield userService_1.userService.findAll();
+            const result = await userService.findAll();
             // Assert
-            expect(result.statusCode).toEqual(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
             expect(result.success).toBeFalsy();
             expect(result.message).toContain("Error finding all users");
             expect(result.responseObject).toEqual(null);
-        }));
+        });
     });
     describe("findById", () => {
-        it("returns a user for a valid ID", () => __awaiter(void 0, void 0, void 0, function* () {
+        it("returns a user for a valid ID", async () => {
             // Arrange
             const testId = 1;
             const mockUser = mockUsers.find((user) => user.id === testId);
-            userRepository_1.userRepository.findByIdAsync.mockReturnValue(mockUser);
+            userRepository.findByIdAsync.mockReturnValue(mockUser);
             // Act
-            const result = yield userService_1.userService.findById(testId);
+            const result = await userService.findById(testId);
             // Assert
-            expect(result.statusCode).toEqual(http_status_codes_1.StatusCodes.OK);
+            expect(result.statusCode).toEqual(StatusCodes.OK);
             expect(result.success).toBeTruthy();
             expect(result.message).toContain("User found");
             expect(result.responseObject).toEqual(mockUser);
-        }));
-        it("handles errors for findByIdAsync", () => __awaiter(void 0, void 0, void 0, function* () {
+        });
+        it("handles errors for findByIdAsync", async () => {
             // Arrange
             const testId = 1;
-            userRepository_1.userRepository.findByIdAsync.mockRejectedValue(new Error("Database error"));
+            userRepository.findByIdAsync.mockRejectedValue(new Error("Database error"));
             // Act
-            const result = yield userService_1.userService.findById(testId);
+            const result = await userService.findById(testId);
             // Assert
-            expect(result.statusCode).toEqual(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
             expect(result.success).toBeFalsy();
             expect(result.message).toContain(`Error finding user with id ${testId}`);
             expect(result.responseObject).toEqual(null);
-        }));
-        it("returns a not found error for non-existent ID", () => __awaiter(void 0, void 0, void 0, function* () {
+        });
+        it("returns a not found error for non-existent ID", async () => {
             // Arrange
             const testId = 1;
-            userRepository_1.userRepository.findByIdAsync.mockReturnValue(null);
+            userRepository.findByIdAsync.mockReturnValue(null);
             // Act
-            const result = yield userService_1.userService.findById(testId);
+            const result = await userService.findById(testId);
             // Assert
-            expect(result.statusCode).toEqual(http_status_codes_1.StatusCodes.NOT_FOUND);
+            expect(result.statusCode).toEqual(StatusCodes.NOT_FOUND);
             expect(result.success).toBeFalsy();
             expect(result.message).toContain("User not found");
             expect(result.responseObject).toEqual(null);
-        }));
+        });
     });
 });

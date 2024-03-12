@@ -1,17 +1,19 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateOpenAPIDocument = void 0;
-const zod_to_openapi_1 = require("@asteasolutions/zod-to-openapi");
-const healthCheckRouter_1 = require("@modules/healthCheck/healthCheckRouter");
-const userRouter_1 = require("@modules/user/userRouter");
+import { OpenAPIRegistry, OpenApiGeneratorV3, } from "@asteasolutions/zod-to-openapi";
+//import { appointmentRegistry } from "@modules/appoinments/appoinmentsRouter";
+import { healthCheckRegistry } from "@modules/healthCheck/healthCheckRouter";
+import { userRegistry } from "@modules/user/userRouter";
 /**
  * Generate an OpenAPI document using the provided registry and return it.
  *
  * @return {object} the generated OpenAPI document
  */
-function generateOpenAPIDocument() {
-    const registry = new zod_to_openapi_1.OpenAPIRegistry([healthCheckRouter_1.healthCheckRegistry, userRouter_1.userRegistry]);
-    const generator = new zod_to_openapi_1.OpenApiGeneratorV3(registry.definitions);
+export function generateOpenAPIDocument() {
+    const registry = new OpenAPIRegistry([
+        healthCheckRegistry,
+        userRegistry,
+        // appointmentRegistry,
+    ]);
+    const generator = new OpenApiGeneratorV3(registry.definitions);
     return generator.generateDocument({
         openapi: "3.0.0",
         info: {
@@ -24,4 +26,3 @@ function generateOpenAPIDocument() {
         },
     });
 }
-exports.generateOpenAPIDocument = generateOpenAPIDocument;

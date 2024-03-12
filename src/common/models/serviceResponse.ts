@@ -8,7 +8,7 @@ export enum ResponseStatus {
 export class ServiceResponse<T = null> {
   success: boolean;
   message: string;
-  responseObject: T;
+  responseObject: T | {};
   statusCode: number;
 
   /**

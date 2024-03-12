@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServiceResponseSchema = exports.ServiceResponse = exports.ResponseStatus = void 0;
-const zod_1 = require("zod");
-var ResponseStatus;
+import { z } from "zod";
+export var ResponseStatus;
 (function (ResponseStatus) {
     ResponseStatus[ResponseStatus["Success"] = 0] = "Success";
     ResponseStatus[ResponseStatus["Failed"] = 1] = "Failed";
-})(ResponseStatus || (exports.ResponseStatus = ResponseStatus = {}));
-class ServiceResponse {
+})(ResponseStatus || (ResponseStatus = {}));
+export class ServiceResponse {
     /**
      * Constructor for creating a new Response object.
      *
@@ -23,17 +20,15 @@ class ServiceResponse {
         this.statusCode = statusCode;
     }
 }
-exports.ServiceResponse = ServiceResponse;
 /**
  * Create a service response schema based on the provided data schema.
  *
  * @param {T} dataSchema - The data schema to build the response schema from
  * @return {z.ZodObject} The service response schema
  */
-const ServiceResponseSchema = (dataSchema) => zod_1.z.object({
-    success: zod_1.z.boolean(),
-    message: zod_1.z.string(),
+export const ServiceResponseSchema = (dataSchema) => z.object({
+    success: z.boolean(),
+    message: z.string(),
     responseObject: dataSchema.optional(),
-    statusCode: zod_1.z.number(),
+    statusCode: z.number(),
 });
-exports.ServiceResponseSchema = ServiceResponseSchema;
